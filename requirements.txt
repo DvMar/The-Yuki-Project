@@ -1,0 +1,22 @@
+fastapi
+uvicorn
+chromadb
+openai
+sentence-transformers
+python-dotenv
+pydantic
+httpx
+python-multipart
+networkx
+numpy
+
+# llama-cpp-python — in-process LLM backend (optional, see models/README.md)
+# CPU-only install (default):
+#   pip install llama-cpp-python
+# NVIDIA CUDA:
+#   $env:CMAKE_ARGS="-DGGML_CUDA=on"; pip install llama-cpp-python --upgrade --force-reinstall --no-cache-dir
+# AMD ROCm:
+#   $env:CMAKE_ARGS="-DGGML_HIPBLAS=on"; pip install llama-cpp-python --upgrade --force-reinstall --no-cache-dir
+# Apple Metal:
+#   CMAKE_ARGS="-DGGML_METAL=on" pip install llama-cpp-python --upgrade --force-reinstall
+llama-cpp-python

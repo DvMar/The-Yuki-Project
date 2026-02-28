@@ -1,0 +1,291 @@
+/* ============================================================
+   telemetry.css — Connectome neural-network visualizer styles
+   Extracted from telemetry.html inline <style>; complements main.css
+   ============================================================ */
+
+/* ── Page layout ──────────────────────────────────────────────── */
+.connectome-layout {
+    display: flex;
+    height: calc(100vh - 48px);
+    overflow: hidden;
+}
+
+/* ── Left panel: live metric readouts ─────────────────────────── */
+.connectome-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.connectome-sidebar::-webkit-scrollbar       { width: 4px; }
+.connectome-sidebar::-webkit-scrollbar-track { background: transparent; }
+.connectome-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.connectome-sidebar::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Main canvas area ─────────────────────────────────────────── */
+.connectome-main {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(ellipse at center, #0a1020 0%, #060a14 80%);
+    overflow: hidden;
+}
+
+#connectome-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ── Overlay status bar ───────────────────────────────────────── */
+.connectome-status-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: rgba(22, 27, 34, 0.85);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: 'Fira Code', monospace;
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 6px var(--success);
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+.pulse-dot.dormant {
+    background: var(--text-muted);
+    box-shadow: none;
+    animation: none;
+}
+
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.45; transform: scale(0.7); }
+}
+
+/* ── Sidebar metric sections ──────────────────────────────────── */
+.csb-section {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 0.6rem 0.75rem;
+}
+
+.csb-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.csb-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0;
+    font-size: 0.78rem;
+    border-bottom: 1px solid rgba(48,54,61,0.5);
+}
+
+.csb-metric:last-child { border-bottom: none; }
+
+.csb-key {
+    color: var(--text-secondary);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+}
+
+.csb-val {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--text-primary);
+    transition: color 0.4s;
+}
+
+/* Value-tier coloring applied dynamically by JS */
+.tier-low    { color: #8b949e !important; }
+.tier-mid    { color: #00cec9 !important; }
+.tier-mid-b  { color: #fdcb6e !important; }
+.tier-high   { color: #a29bfe !important; }
+.tier-peak   { color: #ffffff !important; text-shadow: 0 0 8px #a29bfe; }
+
+/* ── Mini bar inside metric row ───────────────────────────────── */
+.csb-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.csb-bar {
+    height: 4px;
+    width: 48px;
+    background: var(--bg-base);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.csb-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease, background 0.6s ease;
+    width: 0%;
+    background: #4493f8;
+}
+
+/* ── D3 tooltip ───────────────────────────────────────────────── */
+#connectome-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-primary);
+    display: none;
+    max-width: 200px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    z-index: 10;
+}
+
+#connectome-tooltip .tt-name {
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    color: var(--text-primary);
+}
+
+#connectome-tooltip .tt-val {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+
+/* ── Dormant overlay ──────────────────────────────────────────── */
+.dormant-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(6,10,20,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 5;
+}
+
+.dormant-overlay.visible {
+    opacity: 1;
+}
+
+.dormant-msg {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ── Cluster legend dots (top-right) ──────────────────────────── */
+.cluster-legend {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ── WebSocket status chip ────────────────────────────────────── */
+.ws-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 99px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.ws-chip.connected    { color: var(--success); border-color: var(--success); }
+.ws-chip.connecting   { color: var(--warning); border-color: var(--warning); }
+.ws-chip.disconnected { color: var(--danger);  border-color: var(--danger);  }
+
+/* ── Memory neuron notification ───────────────────────────────── */
+.mem-spawn-toast {
+    position: absolute;
+    bottom: 42px;
+    right: 0.75rem;
+    background: rgba(116, 185, 255, 0.12);
+    border: 1px solid #74b9ff;
+    border-radius: 6px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.7rem;
+    font-family: 'Fira Code', monospace;
+    color: #74b9ff;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 8;
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mem-spawn-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Action potential CSS spec ────────────────────────────────── */
+.node-low  { filter: none; }
+.node-mid  { filter: drop-shadow(0 0 4px #00cec9); transition: filter 0.5s ease-in-out; }
+.node-high { filter: drop-shadow(0 0 8px #a29bfe) drop-shadow(0 0 12px #6c5ce7); transition: all 0.5s ease-in-out; }

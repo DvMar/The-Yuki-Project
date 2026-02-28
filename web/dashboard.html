@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Yuki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="app-body">
+
+    <nav class="topnav">
+        <a href="index.html" class="topnav-brand">Yuki</a>
+        <ul class="topnav-links">
+            <li><a href="index.html"       class="topnav-link">Chat</a></li>
+            <li><a href="dashboard.html"   class="topnav-link active">Dashboard</a></li>
+            <li><a href="autopoietic.html" class="topnav-link">Systems</a></li>
+            <li><a href="telemetry.html"   class="topnav-link">Connectome</a></li>
+        </ul>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="sb-section">
+                <div class="sb-label">Connection</div>
+                <div id="connection-status" class="connection-status disconnected">
+                    <span class="status-dot status-offline"></span>Connecting…
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Session</div>
+                <div class="sb-row">
+                    <span class="sb-key">Interactions</span>
+                    <span class="sb-val" id="sb-interactions">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Session msgs</span>
+                    <span class="sb-val" id="sb-session-msgs">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Last update</span>
+                    <span class="sb-val" id="sb-updated">—</span>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Memory</div>
+                <div class="sb-row">
+                    <span class="sb-key">User facts</span>
+                    <span class="sb-val" id="sb-facts">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Episodic</span>
+                    <span class="sb-val" id="sb-episodic">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Graph nodes</span>
+                    <span class="sb-val" id="sb-entities">—</span>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Dream Cycle</div>
+                <div class="sb-row">
+                    <span class="sb-key">Last mode</span>
+                    <span class="sb-val" id="sb-dream-mode">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Idle</span>
+                    <span class="sb-val" id="sb-idle">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Desire</span>
+                    <span class="sb-val" id="sb-desire">—</span>
+                </div>
+            </div>
+
+            <div class="sb-actions">
+                <label class="sb-refresh-label">
+                    <input type="checkbox" id="auto-refresh" checked>
+                    Auto-refresh
+                </label>
+                <button id="refresh-btn" class="sb-btn">Refresh now</button>
+            </div>
+
+        </aside>
+
+        <!-- Main content -->
+        <main class="tel-main">
+
+            <div class="tel-header">
+                <span class="tel-title">State</span>
+                <span id="last-updated" style="font-size:0.7rem;color:var(--text-muted);font-weight:400;"></span>
+            </div>
+
+            <div class="tel-content">
+
+                <!-- Quick stats row -->
+                <div class="stats-grid">
+                    <div id="interaction-count" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Interactions</span>
+                    </div>
+                    <div id="user-facts" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">User Facts</span>
+                    </div>
+                    <div id="memories" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Memories</span>
+                    </div>
+                    <div id="graph-nodes" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Graph Nodes</span>
+                    </div>
+                    <div id="active-tasks" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Active Tasks</span>
+                    </div>
+                    <div id="session-messages" class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Session Msgs</span>
+                    </div>
+                </div>
+
+                <!-- Personality + Affect -->
+                <div class="tel-grid-2">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Personality</h2>
+                            <span class="card-subtitle">Identity Core</span>
+                        </div>
+                        <div id="personality-traits" class="trait-grid"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Affect</h2>
+                            <span class="card-subtitle">Emotional State</span>
+                        </div>
+                        <div id="emotional-state" class="trait-grid"></div>
+                    </div>
+
+                </div>
+
+                <!-- Dream Cycle + Activities -->
+                <div class="tel-grid-2">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Dream Cycle</h2>
+                            <span class="card-subtitle">Background Consciousness</span>
+                        </div>
+                        <div class="dreamcycle-status">
+                            <div class="dreamcycle-item">
+                                <span id="dream-idle-time" class="dreamcycle-value">0s</span>
+                                <span class="dreamcycle-label">Idle Time</span>
+                            </div>
+                            <div class="dreamcycle-item">
+                                <span id="dream-queue-size" class="dreamcycle-value">0</span>
+                                <span class="dreamcycle-label">Queue</span>
+                            </div>
+                            <div class="dreamcycle-item">
+                                <span id="dream-desire" class="dreamcycle-value">0%</span>
+                                <span class="dreamcycle-label">Desire</span>
+                            </div>
+                            <div class="dreamcycle-item">
+                                <span id="dream-running" class="dreamcycle-value">Active</span>
+                                <span class="dreamcycle-label">Status</span>
+                            </div>
+                            <div class="dreamcycle-item">
+                                <span id="dream-mode" class="dreamcycle-value">None</span>
+                                <span class="dreamcycle-label">Last Mode</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Activities</h2>
+                            <span class="card-subtitle">Memory, Tasks &amp; Signatures</span>
+                        </div>
+                        <div id="recent-memories"></div>
+                    </div>
+
+                </div>
+
+            </div><!-- /.tel-content -->
+
+        </main>
+
+    </div><!-- /.app-layout -->
+
+    <script src="js/telemetry.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

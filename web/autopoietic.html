@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systems — Yuki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="app-body">
+
+    <nav class="topnav">
+        <a href="index.html" class="topnav-brand">Yuki</a>
+        <ul class="topnav-links">
+            <li><a href="index.html"       class="topnav-link">Chat</a></li>
+            <li><a href="dashboard.html"   class="topnav-link">Dashboard</a></li>
+            <li><a href="autopoietic.html" class="topnav-link active">Systems</a></li>
+            <li><a href="telemetry.html"   class="topnav-link">Connectome</a></li>
+        </ul>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="sb-section">
+                <div class="sb-label">Connection</div>
+                <div id="sys-connection-status" class="connection-status disconnected">
+                    <span class="status-dot status-offline"></span>Connecting…
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Autopoietic</div>
+                <div class="sb-row">
+                    <span class="sb-key">Cycles</span>
+                    <span class="sb-val" id="sb-cycles">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Goals</span>
+                    <span class="sb-val" id="sb-goals">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Patterns</span>
+                    <span class="sb-val" id="sb-patterns">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Effectiveness</span>
+                    <span class="sb-val" id="sb-effectiveness">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Status</span>
+                    <span class="sb-val" id="sb-auto-status">—</span>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Performance</div>
+                <div class="sb-row">
+                    <span class="sb-key">LLM calls</span>
+                    <span class="sb-val" id="sb-llm-calls">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Success</span>
+                    <span class="sb-val" id="sb-llm-success">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Avg resp</span>
+                    <span class="sb-val" id="sb-avg-ms">—</span>
+                </div>
+            </div>
+
+            <div class="sb-actions">
+                <button id="toggle-enhancement-btn" class="sb-btn">Enable Enhancement</button>
+                <button id="refresh-autopoietic-btn" class="sb-btn">Refresh now</button>
+            </div>
+
+        </aside>
+
+        <!-- Main content -->
+        <main class="tel-main">
+
+            <div class="tel-header">
+                <span class="tel-title">Systems</span>
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-panel="autopoietic">Autopoietic</button>
+                    <button class="tab-btn"         data-panel="performance">Performance</button>
+                </div>
+                <span id="last-updated-autopoietic" style="font-size:0.7rem;color:var(--text-muted);font-weight:400;margin-left:auto;"></span>
+            </div>
+
+            <div class="tel-content">
+
+                <!-- ===== AUTOPOIETIC TAB ===== -->
+                <div class="tab-panel active" id="panel-autopoietic">
+
+                    <!-- Overview stats -->
+                    <div class="stats-grid">
+                        <div id="total-cycles" class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Total Cycles</span>
+                        </div>
+                        <div id="active-subsystems" class="stat-card">
+                            <span class="stat-value">4</span>
+                            <span class="stat-label">Active Systems</span>
+                        </div>
+                        <div id="last-cycle-time" class="stat-card">
+                            <span class="stat-value">Never</span>
+                            <span class="stat-label">Last Cycle</span>
+                        </div>
+                        <div id="system-health" class="stat-card">
+                            <span class="stat-value">100%</span>
+                            <span class="stat-label">System Health</span>
+                        </div>
+                        <div id="active-goals-overview" class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Active Goals</span>
+                        </div>
+                        <div class="stat-card">
+                            <span id="enhancement-status" class="stat-value badge badge-success" style="font-size:0.75rem;">Active</span>
+                            <span class="stat-label">Enhancement</span>
+                        </div>
+                    </div>
+
+                    <!-- Subsystem cards -->
+                    <div class="tel-grid-2">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Architectural Plasticity</h2>
+                                <span class="card-subtitle">Self-Modifying Patterns</span>
+                            </div>
+                            <div class="autopoietic-subsystem">
+                                <div class="subsystem-metrics">
+                                    <div class="metric-item">
+                                        <span id="arch-active-patterns" class="metric-value">0</span>
+                                        <span class="metric-label">Active Patterns</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span id="arch-effectiveness" class="metric-value">0%</span>
+                                        <span class="metric-label">Avg Effectiveness</span>
+                                    </div>
+                                </div>
+                                <div id="arch-suggestions" class="subsystem-details"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Emergent Goal Formation</h2>
+                                <span class="card-subtitle">Autonomous Goal Generation</span>
+                            </div>
+                            <div class="autopoietic-subsystem">
+                                <div class="subsystem-metrics">
+                                    <div class="metric-item">
+                                        <span id="goal-active" class="metric-value">0</span>
+                                        <span class="metric-label">Active Goals</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span id="goal-completed" class="metric-value">0</span>
+                                        <span class="metric-label">Completed</span>
+                                    </div>
+                                </div>
+                                <div id="goal-list" class="subsystem-details"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recursive Reflection</h2>
+                                <span class="card-subtitle">Meta-Reflection on Reflection</span>
+                            </div>
+                            <div class="autopoietic-subsystem">
+                                <div class="subsystem-metrics">
+                                    <div class="metric-item">
+                                        <span id="reflection-depth" class="metric-value">0</span>
+                                        <span class="metric-label">Max Depth</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span id="reflection-quality" class="metric-value">0%</span>
+                                        <span class="metric-label">Quality Score</span>
+                                    </div>
+                                </div>
+                                <div id="reflection-traces" class="subsystem-details"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Meta-Learning Engine</h2>
+                                <span class="card-subtitle">Learning Optimization</span>
+                            </div>
+                            <div class="autopoietic-subsystem">
+                                <div class="subsystem-metrics">
+                                    <div class="metric-item">
+                                        <span id="meta-experiments" class="metric-value">0</span>
+                                        <span class="metric-label">Experiments</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <span id="meta-learning-rate" class="metric-value">0%</span>
+                                        <span class="metric-label">Effectiveness</span>
+                                    </div>
+                                </div>
+                                <div id="meta-optimizations" class="subsystem-details"></div>
+                            </div>
+                        </div>
+
+                    </div><!-- /.tel-grid-2 -->
+
+                    <!-- Recent activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Recent Activity</h2>
+                            <span class="card-subtitle">Latest Evolution Events</span>
+                        </div>
+                        <div id="recent-activity" class="activity-log"></div>
+                    </div>
+
+                </div><!-- /#panel-autopoietic -->
+
+                <!-- ===== PERFORMANCE TAB ===== -->
+                <div class="tab-panel" id="panel-performance">
+
+                    <!-- Real-time overview -->
+                    <div class="stats-grid">
+                        <div id="total-requests" class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Total Requests</span>
+                        </div>
+                        <div id="success-rate" class="stat-card">
+                            <span class="stat-value">100%</span>
+                            <span class="stat-label">Success Rate</span>
+                        </div>
+                        <div id="avg-response-time" class="stat-card">
+                            <span class="stat-value">0ms</span>
+                            <span class="stat-label">Avg Response</span>
+                        </div>
+                        <div id="buffer-writes" class="stat-card">
+                            <span class="stat-value">0</span>
+                            <span class="stat-label">Buffer Writes</span>
+                        </div>
+                        <div id="batch-efficiency" class="stat-card">
+                            <span class="stat-value">0%</span>
+                            <span class="stat-label">Batch Efficiency</span>
+                        </div>
+                        <div id="performance-score" class="stat-card">
+                            <span class="stat-value">0%</span>
+                            <span class="stat-label">Overall Score</span>
+                        </div>
+                    </div>
+
+                    <!-- LLM + Buffer -->
+                    <div class="tel-grid-2">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">LLM Performance</h2>
+                                <span class="card-subtitle">Language Model Stats</span>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span id="llm-total" class="stat-value">0</span>
+                                    <span class="stat-label">Total Calls</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="llm-failed" class="stat-value">0</span>
+                                    <span class="stat-label">Failed Calls</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="llm-success-rate" class="stat-value">100%</span>
+                                    <span class="stat-label">Success Rate</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="llm-batched" class="stat-value">0</span>
+                                    <span class="stat-label">Batched</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="concurrent-limit" class="stat-value">4</span>
+                                    <span class="stat-label">Concurrency</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="llm-batch-efficiency" class="stat-value">0%</span>
+                                    <span class="stat-label">Batch Eff.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Memory Buffer</h2>
+                                <span class="card-subtitle">I/O Optimization</span>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span id="buffer-total-writes" class="stat-value">0</span>
+                                    <span class="stat-label">Total Writes</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="buffer-batched-writes" class="stat-value">0</span>
+                                    <span class="stat-label">Batched</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="buffer-immediate-writes" class="stat-value">0</span>
+                                    <span class="stat-label">Immediate</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="buffer-pending" class="stat-value">0</span>
+                                    <span class="stat-label">Pending</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="buffer-efficiency" class="stat-value">0%</span>
+                                    <span class="stat-label">Efficiency</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span id="buffer-status" class="stat-value">Running</span>
+                                    <span class="stat-label">Status</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /.tel-grid-2 -->
+
+                    <!-- System info + flush -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">System Information</h2>
+                            <span class="card-subtitle">Configuration &amp; Status</span>
+                            <button id="flush-buffer-btn" class="btn btn-secondary btn-sm" style="margin-left:auto;">Flush Buffer</button>
+                        </div>
+                        <div class="tel-grid-2" style="margin-top:0.75rem;">
+                            <div class="bg-tertiary p-4 rounded" style="background:var(--bg-tertiary);padding:1rem;border-radius:0.5rem;border:1px solid var(--border);">
+                                <h3 style="font-size:0.75rem;font-weight:600;margin-bottom:0.5rem;color:var(--accent);">Backend Config</h3>
+                                <div style="font-size:0.75rem;font-family:'Fira Code',monospace;">
+                                    <div>Backend: <span id="backend-type" style="color:var(--accent);">ChromaDB</span></div>
+                                    <div>Session reset: <span id="session-reset" style="color:var(--accent);">false</span></div>
+                                    <div>Buffer: <span id="buffer-running" style="color:var(--accent);">true</span></div>
+                                </div>
+                            </div>
+                            <div style="background:var(--bg-tertiary);padding:1rem;border-radius:0.5rem;border:1px solid var(--border);">
+                                <h3 style="font-size:0.75rem;font-weight:600;margin-bottom:0.5rem;color:var(--accent);">Session</h3>
+                                <div style="font-size:0.75rem;font-family:'Fira Code',monospace;">
+                                    <div>ID: <span id="session-id" style="color:var(--accent);">…</span></div>
+                                    <div>Created: <span id="session-created" style="color:var(--accent);">…</span></div>
+                                    <div>Exchanges: <span id="session-exchanges" style="color:var(--accent);">0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /#panel-performance -->
+
+            </div><!-- /.tel-content -->
+
+        </main>
+
+    </div><!-- /.app-layout -->
+
+    <script src="js/telemetry.js"></script>
+    <script src="js/autopoietic.js"></script>
+</body>
+</html>

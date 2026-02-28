@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectome — Yuki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/telemetry.css">
+    <!-- Legacy imports kept for shared utilities (buttons, cards, etc.) -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- All connectome styles are in css/telemetry.css -->
+</head>
+<body class="app-body">
+
+    <!-- ── Top navigation ──────────────────────────────────────── -->
+    <nav class="topnav">
+        <a href="index.html" class="topnav-brand">Yuki</a>
+        <ul class="topnav-links">
+            <li><a href="index.html"       class="topnav-link">Chat</a></li>
+            <li><a href="dashboard.html"   class="topnav-link">Dashboard</a></li>
+            <li><a href="autopoietic.html" class="topnav-link">Systems</a></li>
+            <li><a href="telemetry.html"   class="topnav-link active">Connectome</a></li>
+        </ul>
+    </nav>
+
+    <!-- ── Main layout ─────────────────────────────────────────── -->
+    <div class="connectome-layout">
+
+        <!-- ── Left sidebar: raw metric readouts ──────────────── -->
+        <aside class="connectome-sidebar">
+
+            <div class="csb-section">
+                <div class="csb-label">System</div>
+                <div class="csb-metric">
+                    <span class="csb-key">status</span>
+                    <span class="csb-val" id="cm-status">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">interactions</span>
+                    <span class="csb-val" id="cm-interactions">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">last update</span>
+                    <span class="csb-val" id="cm-updated">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#f875b0">⬡ Reactive</div>
+                <div class="csb-metric" data-cm-key="valence">
+                    <span class="csb-key">valence</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-valence"></div></div>
+                        <span class="csb-val" id="val-valence">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric" data-cm-key="arousal">
+                    <span class="csb-key">arousal</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-arousal"></div></div>
+                        <span class="csb-val" id="val-arousal">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric" data-cm-key="dominance">
+                    <span class="csb-key">dominance</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-dominance"></div></div>
+                        <span class="csb-val" id="val-dominance">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric" data-cm-key="conflict">
+                    <span class="csb-key">conflict</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-conflict"></div></div>
+                        <span class="csb-val" id="val-conflict">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">joy</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-joy"></div></div>
+                        <span class="csb-val" id="val-joy">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">curiosity</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-curiosity"></div></div>
+                        <span class="csb-val" id="val-curiosity">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#55efc4">⬡ Executive</div>
+                <div class="csb-metric">
+                    <span class="csb-key">intent</span>
+                    <span class="csb-val" id="val-intent">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">response mode</span>
+                    <span class="csb-val" id="val-response-mode">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">resolution</span>
+                    <span class="csb-val" id="val-resolution">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">llm latency</span>
+                    <span class="csb-val" id="val-latency">—</span>
+                </div>
+                <div class="csb-metric" data-cm-key="cogload">
+                    <span class="csb-key">cog load</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-cogload"></div></div>
+                        <span class="csb-val" id="val-cogload">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">fatigue state</span>
+                    <span class="csb-val" id="val-cogload-state">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#74b9ff">⬡ Reflective</div>
+                <div class="csb-metric" data-cm-key="salience">
+                    <span class="csb-key">salience</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-salience"></div></div>
+                        <span class="csb-val" id="val-salience">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">mem candidates</span>
+                    <span class="csb-val" id="val-mem-candidates">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">total memories</span>
+                    <span class="csb-val" id="val-total-memories">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">graph nodes</span>
+                    <span class="csb-val" id="val-graph-nodes">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#a29bfe">⬡ Autopoietic</div>
+                <div class="csb-metric" data-cm-key="plasticity">
+                    <span class="csb-key">plasticity</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-plasticity"></div></div>
+                        <span class="csb-val" id="val-plasticity">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">cycles</span>
+                    <span class="csb-val" id="val-cycles">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">goals active</span>
+                    <span class="csb-val" id="val-goals">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">effectiveness</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-effectiveness"></div></div>
+                        <span class="csb-val" id="val-effectiveness">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#fff4c2">⬡ Enactive Nexus</div>
+                <div class="csb-metric">
+                    <span class="csb-key">free energy</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-free-energy"></div></div>
+                        <span class="csb-val" id="val-free-energy">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">pred error</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-pred-error"></div></div>
+                        <span class="csb-val" id="val-pred-error">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">complexity</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-model-complexity"></div></div>
+                        <span class="csb-val" id="val-model-complexity">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">coherence</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-coherence"></div></div>
+                        <span class="csb-val" id="val-coherence">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">last policy</span>
+                    <span class="csb-val" id="val-enactive-policy">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">temporal policy</span>
+                    <span class="csb-val" id="val-temporal-policy">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#fd9644">⬡ Circadian</div>
+                <div class="csb-metric">
+                    <span class="csb-key">band</span>
+                    <span class="csb-val" id="val-circ-band">—</span>
+                </div>
+                <div class="csb-metric" data-cm-key="circ-open">
+                    <span class="csb-key">openness</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-circ-open"></div></div>
+                        <span class="csb-val" id="val-circ-open">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">tone hint</span>
+                    <span class="csb-val" id="val-circ-tone">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#6c5ce7">⬡ Dream Cycle</div>
+                <div class="csb-metric" data-cm-key="dc-desire">
+                    <span class="csb-key">desire</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-dc-desire"></div></div>
+                        <span class="csb-val" id="val-dc-desire">—</span>
+                    </div>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">dream mode</span>
+                    <span class="csb-val" id="val-dc-mode">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">curiosity q</span>
+                    <span class="csb-val" id="val-dc-curiousq">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">idle</span>
+                    <span class="csb-val" id="val-dc-idle">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">intent pending</span>
+                    <span class="csb-val" id="val-intent-pending">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">intent delivered</span>
+                    <span class="csb-val" id="val-intent-delivered">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">intent suppressed</span>
+                    <span class="csb-val" id="val-intent-suppressed">—</span>
+                </div>
+            </div>
+
+            <div class="csb-section">
+                <div class="csb-label" style="color:#00cec9">⬡ User Model</div>
+                <div class="csb-metric">
+                    <span class="csb-key">known topics</span>
+                    <span class="csb-val" id="val-um-interests">—</span>
+                </div>
+                <div class="csb-metric">
+                    <span class="csb-key">beliefs held</span>
+                    <span class="csb-val" id="val-um-beliefs">—</span>
+                </div>
+                <div class="csb-metric" data-cm-key="um-surprise">
+                    <span class="csb-key">surprise</span>
+                    <div class="csb-bar-wrap">
+                        <div class="csb-bar"><div class="csb-bar-fill" id="bar-um-surprise"></div></div>
+                        <span class="csb-val" id="val-um-surprise">—</span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ── D3 canvas ──────────────────────────────────────── -->
+        <main class="connectome-main" id="connectome-main">
+
+            <svg id="connectome-svg"></svg>
+
+            <!-- Tooltip -->
+            <div id="connectome-tooltip">
+                <div class="tt-name" id="tt-name"></div>
+                <div class="tt-val"  id="tt-val"></div>
+            </div>
+
+            <!-- Dormant state overlay -->
+            <div class="dormant-overlay" id="dormant-overlay">
+                <span class="dormant-msg">◌ Dormant — heartbeat suspended</span>
+            </div>
+
+            <div class="cluster-legend">
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#f875b0;box-shadow:0 0 5px #f875b0"></div>
+                    Reactive
+                </div>
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#55efc4;box-shadow:0 0 5px #55efc4"></div>
+                    Executive
+                </div>
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#74b9ff;box-shadow:0 0 5px #74b9ff"></div>
+                    Reflective
+                </div>
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#a29bfe;box-shadow:0 0 5px #a29bfe"></div>
+                    Autopoietic
+                </div>
+                <div class="legend-row" style="margin-top:0.25rem">
+                    <div class="legend-dot" style="background:#fff4c2;box-shadow:0 0 6px #fff4c2"></div>
+                    Enactive Nexus
+                </div>
+                <div class="legend-row" style="margin-top:0.1rem">
+                    <div class="legend-dot" style="background:#ffeaa7;box-shadow:0 0 5px #ffeaa7"></div>
+                    Identity Core
+                </div>
+                <div class="legend-row" style="margin-top:0.35rem;border-top:1px solid rgba(255,255,255,0.07);padding-top:0.35rem">
+                    <div class="legend-dot" style="background:#fd9644;box-shadow:0 0 5px #fd9644"></div>
+                    Circadian
+                </div>
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#6c5ce7;box-shadow:0 0 5px #6c5ce7"></div>
+                    Dream Cycle
+                </div>
+                <div class="legend-row">
+                    <div class="legend-dot" style="background:#00cec9;box-shadow:0 0 5px #00cec9"></div>
+                    User Model
+                </div>
+            </div>
+
+            <!-- Status bar -->
+            <div class="connectome-status-bar">
+                <div class="status-badge">
+                    <div class="pulse-dot dormant" id="heartbeat-dot"></div>
+                    <span id="heartbeat-label">Connecting…</span>
+                </div>
+                <span class="ws-chip connecting" id="ws-status-chip">⬡ ws connecting…</span>
+                <span id="status-bar-fps">—</span>
+                <span id="status-bar-msg" style="margin-left:auto">Waiting for data…</span>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- External libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <!-- Shared telemetry manager (polling, persistence) -->
+    <script src="js/telemetry.js"></script>
+    <!-- Connectome D3 visualization -->
+    <script src="js/connectome.js"></script>
+</body>
+</html>

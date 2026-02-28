@@ -1,0 +1,34 @@
+# Reflection payload grammar — constrains LLM output to the exact schema
+# expected by LLMClient.get_reflection() / LlmCppBackend.get_reflection()
+#
+# Schema:
+# {
+#   "trait_deltas":     { <trait_name>: <float ∈ [-0.1, 0.1]>, ... },
+#   "emotional_deltas": { <emotion_name>: <float ∈ [-0.1, 0.1]>, ... },
+#   "self_model_deltas":{ <dotted.path>: <float ∈ [-0.1, 0.1]>, ... },
+#   "confidence":       <float ∈ [0.0, 1.0]>,
+#   "user_fact":        <string>,
+#   "ai_self_update":   <string>
+# }
+
+ws ::= ( " " | "\n" | "\t" )*
+
+# Reusable primitives
+string  ::= "\"" ( [^"\\\x7F\x00-\x1F] | "\\" (["\\bfnrt] | "u" [0-9a-fA-F]{4}) )* "\"" ws
+number  ::= ("-"? ([0-9] | [1-9] [0-9]{0,15})) ("." [0-9]+)? ws
+float01 ::= ("0" ("." [0-9]+)? | "1" (".0"*)?) ws
+delta   ::= ("-"? "0" ("." [0-9]+)? | "-"? "0.1" | "0.1") ws
+
+# Delta object: string keys, float values
+delta-pair   ::= string ":" ws delta
+delta-object ::= "{" ws (delta-pair ("," ws delta-pair)*)? "}" ws
+
+# Root object — all six keys required, in this order
+root ::= "{" ws
+  "\"trait_deltas\""     ":" ws delta-object "," ws
+  "\"emotional_deltas\"" ":" ws delta-object "," ws
+  "\"self_model_deltas\"" ws ":" ws delta-object "," ws
+  "\"confidence\""       ":" ws float01 "," ws
+  "\"user_fact\""        ":" ws string "," ws
+  "\"ai_self_update\""   ":" ws string
+  ws "}" ws

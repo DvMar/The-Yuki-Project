@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body class="app-body">
+
+    <!-- Top navigation bar -->
+    <nav class="topnav">
+        <span class="topnav-brand">Yuki</span>
+        <ul class="topnav-links">
+            <li><a href="index.html"       class="topnav-link active">Chat</a></li>
+            <li><a href="dashboard.html"   class="topnav-link">Dashboard</a></li>
+            <li><a href="autopoietic.html" class="topnav-link">Systems</a></li>
+            <li><a href="telemetry.html"   class="topnav-link">Connectome</a></li>
+        </ul>
+    </nav>
+
+    <!-- App layout: sidebar + chat -->
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="sb-section">
+                <div class="sb-label">Connection</div>
+                <div id="connection-status" class="connection-status disconnected">
+                    <span class="status-dot status-offline"></span>Connecting...
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Session</div>
+                <div class="sb-row">
+                    <span class="sb-key">Interactions</span>
+                    <span class="sb-val" id="sb-interactions">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Last update</span>
+                    <span class="sb-val" id="sb-updated">—</span>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Affective State</div>
+                <div id="sb-affect-container"></div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Memory</div>
+                <div class="sb-row">
+                    <span class="sb-key">User facts</span>
+                    <span class="sb-val" id="sb-facts">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Episodic</span>
+                    <span class="sb-val" id="sb-episodic">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Graph nodes</span>
+                    <span class="sb-val" id="sb-entities">—</span>
+                </div>
+            </div>
+
+            <div class="sb-section">
+                <div class="sb-label">Dream Cycle</div>
+                <div class="sb-row">
+                    <span class="sb-key">Last mode</span>
+                    <span class="sb-val" id="sb-dream-mode">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Idle</span>
+                    <span class="sb-val" id="sb-idle">—</span>
+                </div>
+                <div class="sb-row">
+                    <span class="sb-key">Desire</span>
+                    <span class="sb-val" id="sb-desire">—</span>
+                </div>
+            </div>
+
+            <div class="sb-actions">
+                <button onclick="clearChat()" class="sb-btn">Clear chat</button>
+                <button onclick="exportChat()" class="sb-btn">Export</button>
+            </div>
+
+        </aside>
+
+        <!-- Chat area -->
+        <main class="chat-main">
+
+            <div class="chat-header">
+                <span class="chat-title">Conversation</span>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="welcome-block">
+                    <p class="welcome-text">Hello. I'm Yuki — start the conversation below.</p>
+                </div>
+            </div>
+
+            <div class="chat-compose">
+                <textarea
+                    id="chat-input"
+                    class="compose-input"
+                    placeholder="Message Yuki..."
+                    rows="1"
+                ></textarea>
+                <button id="send-button" type="button" class="compose-send">Send</button>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="js/telemetry.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

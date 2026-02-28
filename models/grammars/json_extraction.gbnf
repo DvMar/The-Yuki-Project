@@ -1,0 +1,55 @@
+# Fact/entity/relationship extraction grammar
+# Constrains LLMClient.batched_consolidation() output to the expected schema.
+#
+# Schema:
+# {
+#   "results": [
+#     {
+#       "text_index":     <integer>,
+#       "facts":          [ <string>, ... ],
+#       "entities":       [ { "name": <string>, "type": <string>, "confidence": <float> }, ... ],
+#       "relationships":  [ { "subject": <string>, "predicate": <string>, "object": <string>, "confidence": <float> }, ... ]
+#     },
+#     ...
+#   ]
+# }
+
+ws ::= ( " " | "\n" | "\t" )*
+
+string  ::= "\"" ( [^"\\\x7F\x00-\x1F] | "\\" (["\\bfnrt] | "u" [0-9a-fA-F]{4}) )* "\"" ws
+integer ::= [0-9]+ ws
+float01 ::= ("0" ("." [0-9]+)? | "1" (".0"*)?) ws
+
+# [ "fact1", "fact2", ... ]
+fact-list  ::= "[" ws (string ("," ws string)*)? "]" ws
+
+# { "name": "...", "type": "...", "confidence": 0.9 }
+entity ::= "{" ws
+  "\"name\""       ":" ws string "," ws
+  "\"type\""       ":" ws string "," ws
+  "\"confidence\"" ":" ws float01
+  ws "}" ws
+
+entity-list ::= "[" ws (entity ("," ws entity)*)? "]" ws
+
+# { "subject": "...", "predicate": "...", "object": "...", "confidence": 0.8 }
+relationship ::= "{" ws
+  "\"subject\""    ":" ws string "," ws
+  "\"predicate\""  ":" ws string "," ws
+  "\"object\""     ":" ws string "," ws
+  "\"confidence\"" ":" ws float01
+  ws "}" ws
+
+relationship-list ::= "[" ws (relationship ("," ws relationship)*)? "]" ws
+
+# Single result entry
+result-entry ::= "{" ws
+  "\"text_index\""    ":" ws integer "," ws
+  "\"facts\""         ":" ws fact-list "," ws
+  "\"entities\""      ":" ws entity-list "," ws
+  "\"relationships\"" ":" ws relationship-list
+  ws "}" ws
+
+result-list ::= "[" ws (result-entry ("," ws result-entry)*)? "]" ws
+
+root ::= "{" ws "\"results\"" ":" ws result-list ws "}" ws
